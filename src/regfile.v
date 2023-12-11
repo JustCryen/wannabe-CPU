@@ -10,11 +10,8 @@ module reg_file #(
 	input	rst_n,
 	input	we,
 	input	[DATA_WIDTH-1:0]	acc,	//input
-	//input	[ADDR_WIDTH-1:0]	adderss,
 	input	[REG_BIT_CNT-1:0]	reg_select,
-
-	//input  [REG_BIT_CNT-1:0]	bypass_acc,
-	output [DATA_WIDTH-1:0]	data_out //to alu
+	output [DATA_WIDTH-1:0]	data_out	//to alu
 );
 	reg [DATA_WIDTH-1:0] reg_file [(1<<REG_BIT_CNT)-1:0];
 	reg [REG_BIT_CNT:0] i;
@@ -22,15 +19,12 @@ module reg_file #(
 	assign data_out = reg_file [reg_select];
 
 	always @(negedge rst_n or posedge clk) begin
-//		if (ce == 1) begin	//if chip enabled
 		if (rst_n == 0)	//if reset
 			for (i = 0; i < 8; i = i + 1)
 				reg_file [i] <= 0;	//DATA_WIDTH
-		else begin		//not reset, store to register
-			if (we)
+		else begin		//not reset
+			if (we)		//store to register
 				reg_file [reg_select] <= acc;
-
-//			data_out = reg_file [reg_select];
 		end
 	end
 

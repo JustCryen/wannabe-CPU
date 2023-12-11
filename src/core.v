@@ -1,17 +1,14 @@
 `timescale 1ps/1ps
-//`include "src/ALU.v"
 
 module core #(
 	parameter ADDR_WIDTH = 5,
 	parameter REG_BIT_CNT = 3,
 	parameter DATA_WIDTH = 16,
 	parameter COMBINED_DATA = ADDR_WIDTH+REG_BIT_CNT+DATA_WIDTH
-		//operation[4] register[3] data[16]
+							//opcode[5]  register[3] data[16]
 )(
 	input	clk,
 	input	rst_ext
-	//output 
-
 );
 	wire rst_int;
 	wire rst_n;
@@ -32,8 +29,7 @@ module core #(
 	always @(*)
 	case (dec_data[ADDR_WIDTH-1])
 		0:	ld_data <= reg_data;
-		1:	ld_data <= rom_data[DATA_WIDTH-1:0];
-		//default: ld_data <= 16'hFF;
+		default:	ld_data <= rom_data[DATA_WIDTH-1:0];
 	endcase
 	
 //	rst_n = rst_int & rst ext;
@@ -43,26 +39,22 @@ acc #(
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
 )acc(
-	//.ld(load),		//[OLD]get read enable from instruction decoder
-	//.st(store),
 	.clk(clk),				//1b
-	.we(load),				//load to accu
-	//.rst_n(rst_n),		//1b
-	//.data_rom(rom_data),
-	.data_alu(alu_data),	//21b
+	.we(load),				//1b load to accu
+	.data_alu(alu_data),	//16b
 
-	.data_out(acc_data)		//21b //do rejestrów
+	.data_out(acc_data)		//16b to registers
 );
 alu #(
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
 )alu(
-	.in1_acc(acc_data),//[DATA_WIDTH-1:0]),		//23b
-	.in2_reg(ld_data),
-	.operation(dec_data),
+	.in1_acc(acc_data),		//16b
+	.in2_reg(ld_data),		//16b
+	.operation(dec_data),	//5b
 
-	.data_out(alu_data)		//21b
+	.data_out(alu_data)		//16b
 );
 program_counter #(
 	.ADDR_WIDTH(ADDR_WIDTH),
@@ -71,9 +63,9 @@ program_counter #(
 )pc(
 	.clk(clk),				//1b
 	.rst_n(rst_n),			//1b
-	.ce(1'b1),
+	.ce(1'b1),				//1b
 
-	.data_out(counter)
+	.data_out(counter)		//5b
 );
 reg_file #(
 	.ADDR_WIDTH(ADDR_WIDTH),
@@ -83,8 +75,8 @@ reg_file #(
 	.clk(clk),				//1b
 	.rst_n(rst_n),			//1b
 	.we(store),				//store to register
-	.acc(acc_data),//[DATA_WIDTH-1:0]),
-	.reg_select(reg_sel),//[COMBINED_DATA-ADDR_WIDTH-1:DATA_WIDTH]),  //3b (replacing ce)
+	.acc(acc_data),			//16b
+	.reg_select(reg_sel),	//3b (replacing ce)
 
 	.data_out(reg_data)		//16b
 );
@@ -96,19 +88,18 @@ instruction_decoder #(
 	.clk(clk),				//1b
 	.data_in(rom_data),		//21b
 
-	.opcode(dec_data),	//5b
-	.reg_sel(reg_sel),
-	.rst_f(rst_int),
-	.load(load),
-	.store(store)
+	.opcode(dec_data),		//5b
+	.reg_sel(reg_sel),		//3b
+	.rst_f(rst_int),		//1b
+	.load(load),			//1b
+	.store(store)			//1b
 );
 rom #(
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
 )rom(
-	//.clk(clk),				//1b
-	.address(counter),
+	.address(counter),		//5b
 
 	.data_out(rom_data)		//21b
 );

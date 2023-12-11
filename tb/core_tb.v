@@ -1,5 +1,4 @@
 `timescale 1ps/1ps
-//`include "src/Core.v"
 
 module core_tb;
 
