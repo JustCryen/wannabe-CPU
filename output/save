@@ -1,0 +1,7 @@
+#! /bin/bash
+
+rm 'output/Core.lxt'
+iverilog -Wall -o output/Core.vvp tb/core_tb.v src/*.v && vvp output/Core.vvp -lxt2
+if ! [[ $1 == "-q" ]]; then
+	gtkwave output/Core.lxt output/Core.gtkw >> /dev/null & disown && sleep 2 && echo ''
+fi
