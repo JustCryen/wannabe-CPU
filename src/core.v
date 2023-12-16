@@ -22,17 +22,16 @@ module core #(
 	wire [DATA_WIDTH-1:0] alu_data;
 	wire [COMBINED_DATA-1:0] rom_data;
 	wire [ADDR_WIDTH-1:0] dec_data;
-	reg [DATA_WIDTH-1:0] ld_data;
+	reg	 [DATA_WIDTH-1:0] ld_data;
 
 	assign rst_n = rst_ext && rst_int;
 	
 	always @(*)
 	case (dec_data[ADDR_WIDTH-1])
 		0:	ld_data <= reg_data;
-		default:	ld_data <= rom_data[DATA_WIDTH-1:0];
+		default:
+			ld_data <= rom_data[DATA_WIDTH-1:0];
 	endcase
-	
-//	rst_n = rst_int & rst ext;
 
 acc #(
 	.ADDR_WIDTH(ADDR_WIDTH),
