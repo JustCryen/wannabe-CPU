@@ -1,5 +1,4 @@
 //example program
-//LD  b 0000 0111 1111 1111
 LD  #4  // load 4 to accu
 ST  R0  // store previous acc to R0
 

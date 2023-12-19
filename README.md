@@ -15,3 +15,11 @@ Keep in mind that testbench uses the LXT2 format instead of the default VCD, thi
  - The project includes [inst_filter.gtkw](https://github.com/JustCryen/wannabe-CPU/blob/master/output/inst_filter.gtkw) file, which can be used in gtkwave to replace 5-bit entries containing opcodes to mnemonic representation of the instruction.
  - Both scripts ([iverilog-run](https://github.com/JustCryen/iverilog-run) and `./output/save`) can be appended with `-q` flag to execute them without launching gtkwave, then an existing gtkwave instance can be refreshed with `CTRL + SHIFT + R`
  - Gtkwave itself can save signal arrangement with `CTRI + S` key combination.
+ 
+# TODO
+- [ ] Add carry support
+- [x] Add a simple jump
+- [ ] Add conditional jump
+- [ ] Add relative jump
+- [ ] Move ROM outside of the core.v
+- [ ] Add pipeline

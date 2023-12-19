@@ -17,14 +17,14 @@ core UUT(
 
 		#5	rst_ext = 1'b0;
 		#5	rst_ext = 1'b1;
-		#200 rst_ext = 1'b0;
-		#5	rst_ext = 1'b1;
+//		#200 rst_ext = 1'b0;
+//		#5	rst_ext = 1'b1;
 	end
 
 	initial begin
 		$dumpfile ("output/Core.lxt");
 		$dumpvars (0, core_tb);
 		$dumpon;
-		#500 $finish;
+		#2000 $finish;
 	end
 endmodule

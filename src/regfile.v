@@ -1,10 +1,12 @@
 `timescale 1ps/1ps
 
 module reg_file #(
+	parameter UNDEFINED = 0,
+	parameter CNTR_WIDTH = 0,
 	parameter ADDR_WIDTH = 0,
 	parameter REG_BIT_CNT = 0,
 	parameter DATA_WIDTH = 0,
-	parameter COMBINED_DATA = ADDR_WIDTH+REG_BIT_CNT+DATA_WIDTH
+	parameter COMBINED_DATA = ADDR_WIDTH+UNDEFINED+DATA_WIDTH
 )(
 	input	clk,
 	input	rst_n,

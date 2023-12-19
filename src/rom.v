@@ -1,15 +1,17 @@
 `timescale 1ps/1ps
 
 module rom #(
+	parameter UNDEFINED = 0,
+	parameter CNTR_WIDTH = 0,
 	parameter ADDR_WIDTH = 0,
 	parameter REG_BIT_CNT = 0,
 	parameter DATA_WIDTH = 0,
-	parameter COMBINED_DATA = ADDR_WIDTH+REG_BIT_CNT+DATA_WIDTH
+	parameter COMBINED_DATA = ADDR_WIDTH+UNDEFINED+DATA_WIDTH
 )(
-	input	[ADDR_WIDTH-1:0]	address,
+	input	[CNTR_WIDTH-1:0]	address,
 	output	[COMBINED_DATA-1:0]	data_out
 );
-	reg [COMBINED_DATA-1:0] rom [0:DATA_WIDTH-1];
+	reg [COMBINED_DATA-1:0] rom [0:24-1];  //24 - rom length
 	assign data_out = rom[address];
 
 	initial

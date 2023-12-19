@@ -1,10 +1,12 @@
 `timescale 1ps/1ps
 
 module core #(
+	parameter UNDEFINED = 3,
+	parameter CNTR_WIDTH = 8,
 	parameter ADDR_WIDTH = 5,
 	parameter REG_BIT_CNT = 3,
 	parameter DATA_WIDTH = 16,
-	parameter COMBINED_DATA = ADDR_WIDTH+REG_BIT_CNT+DATA_WIDTH
+	parameter COMBINED_DATA = ADDR_WIDTH+UNDEFINED+DATA_WIDTH
 							//opcode[5]  register[3] data[16]
 )(
 	input	clk,
@@ -15,9 +17,10 @@ module core #(
 
 	wire load;
 	wire store;
+	wire jmp;
 	wire [DATA_WIDTH-1:0] reg_data;
 	wire [DATA_WIDTH-1:0] acc_data;
-	wire [ADDR_WIDTH-1:0] counter;
+	wire [CNTR_WIDTH-1:0] counter;
 	wire [REG_BIT_CNT-1:0] reg_sel;
 	wire [DATA_WIDTH-1:0] alu_data;
 	wire [COMBINED_DATA-1:0] rom_data;
@@ -34,6 +37,8 @@ module core #(
 	endcase
 
 acc #(
+	.UNDEFINED(UNDEFINED),
+	.CNTR_WIDTH(CNTR_WIDTH),
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
@@ -45,6 +50,8 @@ acc #(
 	.data_out(acc_data)		//16b to registers
 );
 alu #(
+	.UNDEFINED(UNDEFINED),
+	.CNTR_WIDTH(CNTR_WIDTH),
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
@@ -56,6 +63,8 @@ alu #(
 	.data_out(alu_data)		//16b
 );
 program_counter #(
+	.UNDEFINED(UNDEFINED),
+	.CNTR_WIDTH(CNTR_WIDTH),
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
@@ -63,10 +72,15 @@ program_counter #(
 	.clk(clk),				//1b
 	.rst_n(rst_n),			//1b
 	.ce(1'b1),				//1b
+//	.rom_data(rom_data[COMBINED_DATA-ADDR_WIDTH-UNDEFINED-1:DATA_WIDTH-CNTR_WIDTH]),
+	.rom_data(rom_data[CNTR_WIDTH-1:0]),
+	.jmp(jmp),
 
 	.data_out(counter)		//5b
 );
 reg_file #(
+	.UNDEFINED(UNDEFINED),
+	.CNTR_WIDTH(CNTR_WIDTH),
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
@@ -80,25 +94,31 @@ reg_file #(
 	.data_out(reg_data)		//16b
 );
 instruction_decoder #(
+	.UNDEFINED(UNDEFINED),
+	.CNTR_WIDTH(CNTR_WIDTH),
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
 )dec(
 	.clk(clk),				//1b
 	.data_in(rom_data),		//21b
+//	.cin(counter),			//5b
 
 	.opcode(dec_data),		//5b
+	.jmp(jmp),				//5b
 	.reg_sel(reg_sel),		//3b
 	.rst_f(rst_int),		//1b
 	.load(load),			//1b
 	.store(store)			//1b
 );
 rom #(
+	.UNDEFINED(UNDEFINED),
+	.CNTR_WIDTH(CNTR_WIDTH),
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
 )rom(
-	.address(counter),		//5b
+	.address(counter),	//5b
 
 	.data_out(rom_data)		//21b
 );

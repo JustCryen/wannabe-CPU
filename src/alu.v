@@ -2,10 +2,12 @@
 `include "src/instructions.v"
 
 module alu #(
+	parameter UNDEFINED = 0,
+	parameter CNTR_WIDTH = 0,
 	parameter ADDR_WIDTH = 0,
 	parameter REG_BIT_CNT = 0,
 	parameter DATA_WIDTH = 0,
-	parameter COMBINED_DATA = ADDR_WIDTH+REG_BIT_CNT+DATA_WIDTH
+	parameter COMBINED_DATA = ADDR_WIDTH+UNDEFINED+DATA_WIDTH
 )(
 	input	[DATA_WIDTH-1:0]	in1_acc,
 	input	[DATA_WIDTH-1:0]	in2_reg,
@@ -31,5 +33,7 @@ module alu #(
 			`LDr:	data_out <= {3'b000, in2_reg};
 			default:data_out <= {3'b000, in1_acc};
 		endcase
+
+
 	end
 endmodule

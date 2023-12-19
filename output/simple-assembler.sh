@@ -22,11 +22,12 @@ sed -i    's/ST/01011 000/g' $binfile
 sed -i   's/NOP/01100 000 0000 0000 0000 0000/g' $binfile
 sed -i   's/RST/01111 000/g' $binfile
 
+sed -i 's/JMP #/10000 000 #/g'	$binfile
 sed -i 's/ADD #/10101 000 #/g'	$binfile #ADDr
 #sed -i 's/ST  #/11011 000 #/g' $binfile
 sed -i 's/LD  #/11010 000 #/g' $binfile
-sed -i 's/LD  b/01010 000 /g' $binfile
 
+sed -i 's/LD  b/01010 000 /g' $binfile
 
 # Registers
 sed -i 's/R0/000 0 0000 0000 0000/g' $binfile
@@ -39,6 +40,12 @@ sed -i 's/R6/110 0 0000 0000 0000/g' $binfile
 sed -i 's/R7/111 0 0000 0000 0000/g' $binfile
 
 # Binary numbers
+sed -i 's/#10/0000 0000 0000 1010/g' $binfile
+sed -i 's/#11/0000 0000 0000 1011/g' $binfile
+sed -i 's/#12/0000 0000 0000 1100/g' $binfile
+sed -i 's/#13/0000 0000 0000 1101/g' $binfile
+sed -i 's/#14/0000 0000 0000 1110/g' $binfile
+sed -i 's/#15/0000 0000 0000 1111/g' $binfile
 sed -i  's/#0/0000 0000 0000 0000/g' $binfile
 sed -i  's/#1/0000 0000 0000 0001/g' $binfile
 sed -i  's/#2/0000 0000 0000 0010/g' $binfile
@@ -49,12 +56,6 @@ sed -i  's/#6/0000 0000 0000 0110/g' $binfile
 sed -i  's/#7/0000 0000 0000 0111/g' $binfile
 sed -i  's/#8/0000 0000 0000 1000/g' $binfile
 sed -i  's/#9/0000 0000 0000 1001/g' $binfile
-sed -i 's/#10/0000 0000 0000 1010/g' $binfile
-sed -i 's/#11/0000 0000 0000 1011/g' $binfile
-sed -i 's/#12/0000 0000 0000 1100/g' $binfile
-sed -i 's/#13/0000 0000 0000 1101/g' $binfile
-sed -i 's/#14/0000 0000 0000 1110/g' $binfile
-sed -i 's/#15/0000 0000 0000 1111/g' $binfile
 
 # Hex numbers
 sed -i 's/0x0/0000 0000 0000 0000/g' $binfile
