@@ -2,32 +2,40 @@
 
 cd output
 binfile=rom_prog.bin
+bitlength=24
+filelength=24
 
 # Remove comments
 sed 's/\/\/.*//g;w rom_prog.bin' $(basename $1) > /dev/null
 
 # Translate opcodes
-sed -i   's/NOT/00000 000/g' $binfile
-sed -i   's/XOR/00001 000/g' $binfile
-sed -i    's/OR/00010 000/g' $binfile
-sed -i   's/AND/00011 000/g' $binfile
-sed -i   's/SUB/00100 000/g' $binfile
+sed -i   's/NOP/00000 000 0000 0000 0000 0000/g' $binfile
+sed -i   's/XOR/00001 000/g'	$binfile
+sed -i    's/OR/00010 000/g'	$binfile
+sed -i   's/AND/00011 000/g'	$binfile
+sed -i 's/SUB R/00100 000 R/g'	$binfile #ADD1
 sed -i 's/ADD R/00101 000 R/g'	$binfile #ADD1
-sed -i    's/RR/00110 000/g' $binfile
-sed -i    's/RL/00111 000/g' $binfile
-sed -i   's/DEC/01000 000/g' $binfile
-sed -i   's/INC/01001 000/g' $binfile
-sed -i 's/LD  R/01010 000 R/g' $binfile
-sed -i    's/ST/01011 000/g' $binfile
-sed -i   's/NOP/01100 000 0000 0000 0000 0000/g' $binfile
-sed -i   's/RST/01111 000/g' $binfile
+sed -i    's/RR/00110 000/g'	$binfile
+sed -i    's/RL/00111 000/g'	$binfile
+sed -i   's/DEC/01000 000/g'	$binfile
+sed -i   's/INC/01001 000/g'	$binfile
+sed -i 's/LD  R/01010 000 R/g'	$binfile
+sed -i    's/ST/01011 000/g'	$binfile
+sed -i   's/NOT/01100 000/g'	$binfile
+sed -i   's/RST/01111 000 0000 0000 0000 0000/g' $binfile
 
-sed -i 's/JMP #/10000 000 #/g'	$binfile
+sed -i 's/JEZ #/10000 000 #/g'	$binfile
+
+sed -i 's/JNZ #/10001 000 #/g'	$binfile
+sed -i 's/JLZ #/10010 000 #/g'	$binfile
+sed -i 's/JGZ #/10011 000 #/g'	$binfile
+sed -i 's/SUB #/10100 000 #/g'	$binfile #ADDr
 sed -i 's/ADD #/10101 000 #/g'	$binfile #ADDr
+sed -i 's/JMP #/10110 000 #/g'	$binfile
 #sed -i 's/ST  #/11011 000 #/g' $binfile
-sed -i 's/LD  #/11010 000 #/g' $binfile
+sed -i 's/LD  #/11010 000 #/g'	$binfile
 
-sed -i 's/LD  b/01010 000 /g' $binfile
+sed -i 's/LD  b/01010 000 /g'	$binfile
 
 # Registers
 sed -i 's/R0/000 0 0000 0000 0000/g' $binfile
@@ -76,14 +84,20 @@ sed -i 's/0xE/0000 0000 0000 1110/g' $binfile
 sed -i 's/0xF/0000 0000 0000 1111/g' $binfile
 
 # Remove whitespace and empty newlines
-sed -i 's/[[:space:]]//g'  $binfile
-sed -i '/^$/d' $binfile
+sed -i 's/[[:space:]]//g'	$binfile
+sed -i '/^$/d'	$binfile
 
 # Quick info
-linecount=$(wc -l $binfile | sed "s/$binfile//g")
-linelength=$(wc -L $binfile | sed "s/$binfile//g")
+linecount=$(wc -l $binfile | sed "s/\ $binfile//g")
+bitcount=$(wc -L $binfile | sed "s/\ $binfile//g")
 
 echo "Generated file:"
 cat $binfile
-echo -e "\nLines count:\t $linecount/ 16" 
-echo -e "Max line length: $linelength/ 24"
+echo -e "\nLines count:\t $linecount / $filelength" 
+echo -e "Max line length: $bitcount / $bitlength"
+
+padding=$(expr $filelength - $linecount)
+for (( i=$padding; i>0; i-- ))
+do
+	echo 000000000000000000000000 >> $binfile
+done

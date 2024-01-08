@@ -12,12 +12,15 @@ module core #(
 	input	clk,
 	input	rst_ext
 );
-	wire rst_int;
+	wire rst_int = 1;
 	wire rst_n;
 
 	wire load;
 	wire store;
 	wire jmp;
+	wire zero_f;
+	wire ls_z_f;
+	wire gr_z_f;
 	wire [DATA_WIDTH-1:0] reg_data;
 	wire [DATA_WIDTH-1:0] acc_data;
 	wire [CNTR_WIDTH-1:0] counter;
@@ -30,7 +33,7 @@ module core #(
 	assign rst_n = rst_ext && rst_int;
 	
 	always @(*)
-	case (dec_data[ADDR_WIDTH-1])
+	case (dec_data == `SUBi || dec_data == `ADDi || dec_data == `LDi)
 		0:	ld_data <= reg_data;
 		default:
 			ld_data <= rom_data[DATA_WIDTH-1:0];
@@ -60,7 +63,10 @@ alu #(
 	.in2_reg(ld_data),		//16b
 	.operation(dec_data),	//5b
 
-	.data_out(alu_data)		//16b
+	.data_out(alu_data),	//16b
+	.zero_f(zero_f),
+	.ls_z_f(ls_z_f),
+	.gr_z_f(gr_z_f)
 );
 program_counter #(
 	.UNDEFINED(UNDEFINED),
@@ -101,6 +107,9 @@ instruction_decoder #(
 	.DATA_WIDTH(DATA_WIDTH)
 )dec(
 	.clk(clk),				//1b
+	.zero_f(zero_f),
+	.ls_z_f(ls_z_f),
+	.gr_z_f(gr_z_f),
 	.data_in(rom_data),		//21b
 //	.cin(counter),			//5b
 
