@@ -3,9 +3,9 @@
  001 SUBrADDr RL  RR
  011 NOT NOT RST RST
  010 DEC INC  ST LDr
- 110 --- --- --- LDi
+ 110 JMP --- --- LDi
  111 --- --- --- ---
- 101 SUB1ADDi--- JMP
+ 101 SUB1ADDi SL  SR
  100 JEZ JNZ JGZ JLZ
  (ALU default - NOP)
 */ //instruction set
@@ -30,6 +30,8 @@
 `define JGZ	5'b10011
 `define SUBi	5'b10100
 `define ADDi	5'b10101
-`define JMP	5'b10110
+`define SR	5'b10110
+`define SL	5'b10111
 
+`define JMP	5'b11000
 `define LDi	5'b11010

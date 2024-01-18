@@ -22,7 +22,7 @@ Keep in mind that testbench uses the LXT2 format instead of the default VCD, thi
 - [x] Add conditional jump
 - [ ] Add relative jump
 - [ ] Jumps from register value
-- [ ] Add negative numbers (two's complement)
+- [x] Add negative numbers (two's complement)
 - [ ] Turns out internal RST doesn't work, fix it
 - [ ] Move ROM outside of the core.v
 - [ ] Add pipeline

@@ -8,7 +8,8 @@ ST  R1  // store result to R1
 ADD R0  // add 4 stored in R0 to the current 6
 ST  R2  // store result to R2
 
-RR  R1  // rotate right the value in R1
+LD  R1  //
+RR      // rotate right the value in R1
 ST  R3  // store result to R3
 
 //Load values stored in all registers
