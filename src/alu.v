@@ -17,8 +17,6 @@ module alu #(
 	output	ls_z_f,
 	output	gr_z_f
 );
-	//wire [DATA_WIDTH-1:0]	in1;
-	//wire [DATA_WIDTH-1:0]	in2;
 
 	always @(*) begin
 		casex (operation)
@@ -28,9 +26,6 @@ module alu #(
 			`AND:	data_out <= {3'b000, in1_acc & in2_reg};
 			`SUBr:	data_out <= {3'b000, in1_acc - in2_reg};
 			`ADDr:	data_out <= {3'b000, in1_acc + in2_reg};
-//			`ADDr:	data_out <= in1_acc[DATA_WIDTH-1] ?
-//					(in2_reg[DATA_WIDTH-1] ? {3'b000,(~in1_acc + 1) + (~in2_reg + 1)} : {3'b000,(~in1_acc + 1) + in2_reg}):
-//					(in2_reg[DATA_WIDTH-1] ? {3'b000,  in1_acc      + (~in2_reg + 1)} : {3'b000,  in1_acc      + in2_reg});
 			`SR:	data_out <= {3'b000, in1_acc >>> 1};
 			`SL:	data_out <= {3'b000, in1_acc <<< 1};
 			`RR:	data_out <= {in1_acc[0], in1_acc[DATA_WIDTH - 1: 1]};
@@ -47,11 +42,8 @@ module alu #(
 		endcase
 	end
 
-//	assign in1 = in1_acc[DATA_WIDTH-1] ? ~in1_acc + 1 : in1_acc;
-//	assign in2 = in2_reg[DATA_WIDTH-1] ? ~in2_reg + 1 : in2_reg;
-
+	assign gr_z_f = ~data_out[DATA_WIDTH-1] && ~zero_f ? 1:0;
 	assign zero_f = data_out == 0 ? 1:0;
 	assign ls_z_f = data_out[DATA_WIDTH-1] ? 1:0;
-	assign gr_z_f = ~data_out[DATA_WIDTH-1] && ~(data_out == 0)  ? 1:0;
 
 endmodule

@@ -17,12 +17,13 @@ Keep in mind that testbench uses the LXT2 format instead of the default VCD, thi
  - Gtkwave itself can save signal arrangement with `CTRI + S` key combination.
  
 # TODO
-- [ ] Add carry support
+- [ ] Carry support
 - [x] Add a simple jump 
-- [x] Add conditional jump
-- [ ] Add relative jump
+- [x] Conditional jump
+- [ ] Relative jump
 - [ ] Jumps from register value
-- [x] Add negative numbers (two's complement)
+- [x] Calls and returns
+- [x] Negative numbers (two's complement)
 - [ ] Turns out internal RST doesn't work, fix it
 - [ ] Move ROM outside of the core.v
-- [ ] Add pipeline
+- [ ] Pipeline

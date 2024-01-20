@@ -10,21 +10,23 @@ module program_counter #(
 )(
 	input	clk,
 	input	rst_n,
-	input	[CNTR_WIDTH-1:0]		rom_data,
 	input	jmp,
-	input	ce,
+	input	ret_f,
+	input	[CNTR_WIDTH-1:0]		rom_data,
+	input	[CNTR_WIDTH-1:0]		ret_data,
 	output	reg [CNTR_WIDTH-1:0]	data_out
 );
 	always @(negedge rst_n or posedge clk) begin
 		if (rst_n == 0)
 			data_out <= 0;
 		else begin
-			if (ce) begin
-				if (jmp)
-					data_out <= rom_data;
+			if (jmp)
+				if (ret_f)
+					data_out <= ret_data + 1'b1;
 				else
-					data_out <= data_out + 1'b1;
-			end
+					data_out <= rom_data;
+			else
+				data_out <= data_out + 1'b1;
 		end
 	end
 endmodule

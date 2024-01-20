@@ -6,7 +6,7 @@ bitlength=24
 filelength=24
 
 # Remove comments
-sed 's/\/\/.*//g;w rom_prog.bin' $(basename $1) > /dev/null
+sed 's/\/\/.*//g;w rom_prog.bin' ../programs/$(basename $1) > /dev/null
 
 # Translate opcodes
 sed -i   's/NOP/00000 000 0000 0000 0000 0000/g' $binfile
@@ -20,9 +20,10 @@ sed -i    's/RL/00111 000 0000 0000 0000 0000/g'	$binfile
 sed -i   's/DEC/01000 000/g'	$binfile
 sed -i   's/INC/01001 000/g'	$binfile
 sed -i 's/LD  R/01010 000 R/g'	$binfile
-sed -i    's/ST/01011 000/g'	$binfile
 sed -i   's/NOT/01100 000/g'	$binfile
 sed -i   's/RST/01111 000 0000 0000 0000 0000/g' $binfile
+
+sed -i    's/ST/01011 000/g'	$binfile
 
 sed -i 's/JEZ #/10000 000 #/g'	$binfile
 sed -i 's/JNZ #/10001 000 #/g'	$binfile
@@ -35,7 +36,9 @@ sed -i    's/SL/10111 000 0000 0000 0000 0000/g'	$binfile
 
 
 sed -i 's/JMP #/11000 000 #/g'	$binfile
+sed -i 's/CAL #/11001 000 #/g'	$binfile
 sed -i 's/LD  #/11010 000 #/g'	$binfile
+sed -i   's/RET/11011 000 0000 0000 0000 0000/g'	$binfile
 
 sed -i 's/LD  b/01010 000 /g'	$binfile
 

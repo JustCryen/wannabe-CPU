@@ -3,7 +3,7 @@
  001 SUBrADDr RL  RR
  011 NOT NOT RST RST
  010 DEC INC  ST LDr
- 110 JMP --- --- LDi
+ 110 JMP CAL RET LDi
  111 --- --- --- ---
  101 SUB1ADDi SL  SR
  100 JEZ JNZ JGZ JLZ
@@ -34,4 +34,6 @@
 `define SL	5'b10111
 
 `define JMP	5'b11000
+`define CAL	5'b11001
 `define LDi	5'b11010
+`define RET	5'b11011
