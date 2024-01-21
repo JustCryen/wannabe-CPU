@@ -22,6 +22,7 @@ module call_reg #(
 		if (rst_n == 0)	//if reset
 //			for (i = 0; i < 8; i = i + 1)
 //				call_reg [i] <= 0;
+			@(posedge clk)
 			call_reg <= 0;
 		else begin		//not reset
 			if (cal_f)

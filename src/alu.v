@@ -27,7 +27,7 @@ module alu #(
 			`SUBr:	data_out <= {3'b000, in1_acc - in2_reg};
 			`ADDr:	data_out <= {3'b000, in1_acc + in2_reg};
 			`SR:	data_out <= {3'b000, in1_acc >>> 1};
-			`SL:	data_out <= {3'b000, in1_acc <<< 1};
+			`SL:	data_out <= {3'b000, in1_acc << 1};
 			`RR:	data_out <= {in1_acc[0], in1_acc[DATA_WIDTH - 1: 1]};
 			`RL:	data_out <= {in1_acc[DATA_WIDTH-2: 0], in1_acc[DATA_WIDTH-1]};
 			`DEC:	data_out <= {3'b000, in1_acc - 1'b1};

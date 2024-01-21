@@ -1,0 +1,10 @@
+LD  #4
+ST  R0
+CAL #5
+RST
+RET
+
+// WAIT()
+SUB #1
+JNZ #5
+JMP R0

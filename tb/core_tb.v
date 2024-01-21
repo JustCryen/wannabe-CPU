@@ -15,7 +15,7 @@ core UUT(
 		clk = 1'b0;
 		rst_ext = 1'b1;
 
-		#5	rst_ext = 1'b0;
+		#2	rst_ext = 1'b0;
 		#5	rst_ext = 1'b1;
 //		#200 rst_ext = 1'b0;
 //		#5	rst_ext = 1'b1;

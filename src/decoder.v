@@ -11,10 +11,8 @@ module instruction_decoder #(
 	input	zero_f,
 	input	ls_z_f,
 	input	gr_z_f,
-	input	[COMBINED_DATA-1:0]	data_in,	//24b
-//	input	[CNTR_WIDTH-1:0] cin,
+	input	[COMBINED_DATA-1:0]	rom_data,	//24b
 	output	[ADDR_WIDTH-1:0] opcode,		//5b <opc>[reg][dat]
-//	output	reg [CNTR_WIDTH-1:0] cout,
 	output	[REG_BIT_CNT-1:0] reg_sel,
 	output	jmp,
 	output	cal_f,
@@ -24,23 +22,21 @@ module instruction_decoder #(
 	output	store		//links to regfile
 );
 
-//	wire [CNTR_WIDTH-1:0] jmp_addr;
-
-	assign opcode = data_in[COMBINED_DATA-1:COMBINED_DATA-ADDR_WIDTH];
-	assign reg_sel = data_in[COMBINED_DATA-ADDR_WIDTH-UNDEFINED-1:DATA_WIDTH-REG_BIT_CNT];
-//	assign jmp_addr = data_in[COMBINED_DATA-ADDR_WIDTH-UNDEFINED-1:DATA_WIDTH-CNTR_WIDTH];
+	assign opcode = rom_data[COMBINED_DATA-1:COMBINED_DATA-ADDR_WIDTH];
+	assign reg_sel = rom_data[COMBINED_DATA-ADDR_WIDTH-UNDEFINED-1:DATA_WIDTH-REG_BIT_CNT];
 
 	assign						  {rst_f, load, store, jmp, cal_f, ret_f} = 
-		opcode == `CAL ?		  {1'b1, 1'b0, 1'b0, 1'b1, 1'b1, 1'b0}:
-		opcode == `RET ?		  {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b1}:
-		opcode == `JMP ?		  {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
-		opcode == `JEZ & zero_f ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
-		opcode == `JNZ & !zero_f? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
-		opcode == `JLZ & ls_z_f ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
-		opcode == `JGZ & gr_z_f ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
-		opcode == `RST ?		  {1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}:
-		opcode == `NOP ?		  {1'b1, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}:
-		opcode == `ST  ?		  {1'b1, 1'b0, 1'b1, 1'b0, 1'b0, 1'b0}:
-								  {1'b1, 1'b1, 1'b0, 1'b0, 1'b0, 1'b0};
+		opcode == `CAL			 ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b1, 1'b0}:
+		opcode == `RET			 ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b1}:
+		opcode == `JMPi			 ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
+		opcode == `JMPr			 ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
+		opcode == `JEZ &  zero_f ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
+		opcode == `JNZ & !zero_f ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
+		opcode == `JLZ &  ls_z_f ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
+		opcode == `JGZ &  gr_z_f ? {1'b1, 1'b0, 1'b0, 1'b1, 1'b0, 1'b0}:
+		opcode == `RST			 ? {1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}:
+		opcode == `NOP			 ? {1'b1, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}:
+		opcode == `ST			 ? {1'b1, 1'b0, 1'b1, 1'b0, 1'b0, 1'b0}:
+								   {1'b1, 1'b1, 1'b0, 1'b0, 1'b0, 1'b0};
 
 endmodule

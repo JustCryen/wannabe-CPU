@@ -18,12 +18,12 @@ Keep in mind that testbench uses the LXT2 format instead of the default VCD, thi
  
 # TODO
 - [ ] Carry support
-- [x] Add a simple jump 
+- [x] Add a simple jump
 - [x] Conditional jump
 - [ ] Relative jump
-- [ ] Jumps from register value
+- [x] Jumps from register value
 - [x] Calls and returns
 - [x] Negative numbers (two's complement)
-- [ ] Turns out internal RST doesn't work, fix it
+- [x] Turns out internal RST doesn't work, fix it
 - [ ] Move ROM outside of the core.v
 - [ ] Pipeline

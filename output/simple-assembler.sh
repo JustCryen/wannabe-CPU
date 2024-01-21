@@ -39,6 +39,7 @@ sed -i 's/JMP #/11000 000 #/g'	$binfile
 sed -i 's/CAL #/11001 000 #/g'	$binfile
 sed -i 's/LD  #/11010 000 #/g'	$binfile
 sed -i   's/RET/11011 000 0000 0000 0000 0000/g'	$binfile
+sed -i 's/JMP R/11100 000 R/g'	$binfile
 
 sed -i 's/LD  b/01010 000 /g'	$binfile
 

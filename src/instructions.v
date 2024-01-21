@@ -1,10 +1,10 @@
 /*    00  01  11  10
  000 NOP XOR AND  OR
  001 SUBrADDr RL  RR
- 011 NOT NOT RST RST
+ 011 NOT NOT RST ---
  010 DEC INC  ST LDr
- 110 JMP CAL RET LDi
- 111 --- --- --- ---
+ 110 JMPiCAL RET LDi
+ 111 JMPr--- --- ---
  101 SUB1ADDi SL  SR
  100 JEZ JNZ JGZ JLZ
  (ALU default - NOP)
@@ -22,7 +22,7 @@
 `define LDr	5'b01010
 `define ST	5'b01011
 `define NOT	5'b0110x
-`define RST	5'b0111x
+`define RST	5'b01111
 
 `define JEZ	5'b10000
 `define JNZ	5'b10001
@@ -33,7 +33,8 @@
 `define SR	5'b10110
 `define SL	5'b10111
 
-`define JMP	5'b11000
+`define JMPi	5'b11000
 `define CAL	5'b11001
 `define LDi	5'b11010
 `define RET	5'b11011
+`define JMPr	5'b11100

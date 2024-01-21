@@ -12,7 +12,7 @@ module core #(
 	input	clk,
 	input	rst_ext
 );
-	wire rst_int = 1;
+	wire rst_int;
 	wire rst_n;
 
 	wire load;
@@ -31,16 +31,22 @@ module core #(
 	wire [COMBINED_DATA-1:0] rom_data;
 	wire [CNTR_WIDTH-1:0] ret_data;
 	wire [ADDR_WIDTH-1:0] dec_data;
-	reg	 [DATA_WIDTH-1:0] ld_data;
+	reg  [DATA_WIDTH-1:0] ld_data;
+	reg  [CNTR_WIDTH-1:0] ld_cntr;
 
 	assign rst_n = rst_ext && rst_int;
-	
-	always @(*)
-	case (dec_data == `SUBi || dec_data == `ADDi || dec_data == `LDi)
-		0:	ld_data <= reg_data;
-		default:
-			ld_data <= rom_data[DATA_WIDTH-1:0];
-	endcase
+	always @(*) begin
+		case (dec_data == `SUBi || dec_data == `ADDi || dec_data == `LDi)
+			0:	ld_data <= reg_data;
+			default:
+				ld_data <= rom_data[DATA_WIDTH-1:0];
+		endcase
+		case (dec_data == `JMPr)
+			0:	ld_cntr <= rom_data[CNTR_WIDTH-1:0];
+			default:
+				ld_cntr <= reg_data[CNTR_WIDTH-1:0];
+		endcase
+	end
 
 acc #(
 	.UNDEFINED(UNDEFINED),
@@ -82,8 +88,7 @@ program_counter #(
 	.rst_n(rst_n),			//1b
 	.jmp(jmp),				//1b
 	.ret_f(ret_f),			//1b
-//	.rom_data(rom_data[COMBINED_DATA-ADDR_WIDTH-UNDEFINED-1:DATA_WIDTH-CNTR_WIDTH]),
-	.rom_data(rom_data[CNTR_WIDTH-1:0]),
+	.data_in(ld_cntr),
 	.ret_data(ret_data),
 
 	.data_out(counter)		//5b
@@ -127,8 +132,7 @@ instruction_decoder #(
 	.zero_f(zero_f),
 	.ls_z_f(ls_z_f),
 	.gr_z_f(gr_z_f),
-	.data_in(rom_data),		//21b
-//	.cin(counter),			//5b
+	.rom_data(rom_data),	//21b
 
 	.opcode(dec_data),		//5b
 	.jmp(jmp),				//1b
@@ -146,7 +150,7 @@ rom #(
 	.REG_BIT_CNT(REG_BIT_CNT),
 	.DATA_WIDTH(DATA_WIDTH)
 )rom(
-	.address(counter),	//5b
+	.counter(counter),		//5b
 
 	.data_out(rom_data)		//21b
 );

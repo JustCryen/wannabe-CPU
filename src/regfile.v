@@ -22,6 +22,7 @@ module reg_file #(
 
 	always @(negedge rst_n or posedge clk) begin
 		if (rst_n == 0)	//if reset
+			@(posedge clk)
 			for (i = 0; i < 8; i = i + 1)
 				reg_file [i] <= 0;	//DATA_WIDTH
 		else begin		//not reset
