@@ -20,30 +20,30 @@ module alu #(
 
 	always @(*) begin
 		casex (operation)
-			`NOP:	data_out <= {3'b000, in1_acc};
-			`XOR:	data_out <= {3'b000, in1_acc ^ in2_reg};
-			`OR:	data_out <= {3'b000, in1_acc | in2_reg};
-			`AND:	data_out <= {3'b000, in1_acc & in2_reg};
-			`SUBr:	data_out <= {3'b000, in1_acc - in2_reg};
-			`ADDr:	data_out <= {3'b000, in1_acc + in2_reg};
-			`SR:	data_out <= {3'b000, in1_acc >>> 1};
-			`SL:	data_out <= {3'b000, in1_acc << 1};
+			`NOP:	data_out <= in1_acc;
+			`XOR:	data_out <= in1_acc ^ in2_reg;
+			`OR:	data_out <= in1_acc | in2_reg;
+			`AND:	data_out <= in1_acc & in2_reg;
+			`SUBr:	data_out <= in1_acc - in2_reg;
+			`ADDr:	data_out <= in1_acc + in2_reg;
+			`SR:	data_out <= in1_acc >>> 1;
+			`SL:	data_out <= in1_acc << 1;
 			`RR:	data_out <= {in1_acc[0], in1_acc[DATA_WIDTH - 1: 1]};
 			`RL:	data_out <= {in1_acc[DATA_WIDTH-2: 0], in1_acc[DATA_WIDTH-1]};
-			`DEC:	data_out <= {3'b000, in1_acc - 1'b1};
-			`INC:	data_out <= {3'b000, in1_acc + 1'b1};
-			`NOT:	data_out <= {3'b000,~in1_acc};
+			`DEC:	data_out <= in1_acc - 1'b1;
+			`INC:	data_out <= in1_acc + 1'b1;
+			`NOT:	data_out <= ~in1_acc;
 
-			`SUBi:	data_out <= {3'b000, in1_acc - in2_reg};
-			`ADDi:	data_out <= {3'b000, in1_acc + in2_reg};
-			`LDi:	data_out <= {3'b000, in2_reg};
-			`LDr:	data_out <= {3'b000, in2_reg};
-			default:data_out <= {3'b000, in1_acc};
+			`SUBi:	data_out <= in1_acc - in2_reg;
+			`ADDi:	data_out <= in1_acc + in2_reg;
+			`LDi:	data_out <= in2_reg;
+			`LDr:	data_out <= in2_reg;
+			default:data_out <= in1_acc;
 		endcase
 	end
 
-	assign gr_z_f = ~data_out[DATA_WIDTH-1] && ~zero_f ? 1:0;
-	assign zero_f = data_out == 0 ? 1:0;
-	assign ls_z_f = data_out[DATA_WIDTH-1] ? 1:0;
+	assign gr_z_f = ~data_out[DATA_WIDTH-1] & ~zero_f;
+	assign zero_f = ~|data_out;
+	assign ls_z_f = data_out[DATA_WIDTH-1];
 
 endmodule

@@ -17,10 +17,10 @@ sed -i 's/SUB R/00100 000 R/g'	$binfile #ADD1
 sed -i 's/ADD R/00101 000 R/g'	$binfile #ADD1
 sed -i    's/RR/00110 000 0000 0000 0000 0000/g'	$binfile
 sed -i    's/RL/00111 000 0000 0000 0000 0000/g'	$binfile
-sed -i   's/DEC/01000 000/g'	$binfile
-sed -i   's/INC/01001 000/g'	$binfile
+sed -i   's/DEC/01000 000 0000 0000 0000 0000/g'	$binfile
+sed -i   's/INC/01001 000 0000 0000 0000 0000/g'	$binfile
 sed -i 's/LD  R/01010 000 R/g'	$binfile
-sed -i   's/NOT/01100 000/g'	$binfile
+sed -i   's/NOT/01100 000 0000 0000 0000 0000/g'	$binfile
 sed -i   's/RST/01111 000 0000 0000 0000 0000/g' $binfile
 
 sed -i    's/ST/01011 000/g'	$binfile
