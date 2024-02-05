@@ -34,7 +34,7 @@ module core #(
 	reg  [DATA_WIDTH-1:0] ld_data;
 	reg  [CNTR_WIDTH-1:0] ld_cntr;
 
-	assign rst_n = rst_ext && rst_int;
+	assign rst_n = rst_ext & rst_int;
 	always @(*) begin
 		case (dec_data == `SUBi || dec_data == `ADDi || dec_data == `LDi)
 			0:	ld_data <= reg_data;
