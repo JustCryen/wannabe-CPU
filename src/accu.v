@@ -10,7 +10,7 @@ module acc #(
 )(
 	input	clk,
 	input	we,			// write enable
-	inout	[DATA_WIDTH-1:0] data_alu,
+	input	[DATA_WIDTH-1:0] data_alu,
 	output	[DATA_WIDTH-1:0] data_out
 );
 	reg [DATA_WIDTH-1:0] acc = 0;

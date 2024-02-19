@@ -1,7 +1,9 @@
+`ifndef INSTRUCTIONS
+`define INSTRUCTIONS
 /*    00  01  11  10
  000 NOP XOR AND  OR
  001 SUBrADDr RL  RR
- 011 NOT NOT RST ---
+ 011 --- NOT RST ---
  010 DEC INC  ST LDr
  110 JMPiCAL RET LDi
  111 JMPr--- --- ---
@@ -21,7 +23,7 @@
 `define INC	5'b01001
 `define LDr	5'b01010
 `define ST	5'b01011
-`define NOT	5'b0110x
+`define NOT	5'b01101
 `define RST	5'b01111
 
 `define JEZ	5'b10000
@@ -38,3 +40,4 @@
 `define LDi	5'b11010
 `define RET	5'b11011
 `define JMPr	5'b11100
+`endif
